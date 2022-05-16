@@ -1,4 +1,10 @@
 {
+    "brick/math": {
+        "version": "0.9.3"
+    },
+    "brick/money": {
+        "version": "0.5.3"
+    },
     "doctrine/annotations": {
         "version": "1.13",
         "recipe": {
