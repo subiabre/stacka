@@ -4,7 +4,6 @@ namespace App\Accounting\Account;
 
 use App\Accounting\Balance\Balance;
 use App\Entity\Transaction;
-use Brick\Math\BigDecimal;
 
 /**
  * Average accounting assumes the items you sold had an homogenous cost calculated by average

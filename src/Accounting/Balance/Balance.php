@@ -3,7 +3,6 @@
 namespace App\Accounting\Balance;
 
 use Brick\Math\BigDecimal;
-use Brick\Math\RoundingMode;
 use Brick\Money\Money;
 
 /**

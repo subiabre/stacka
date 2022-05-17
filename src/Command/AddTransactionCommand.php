@@ -6,7 +6,6 @@ use App\Accounting\Balance\Balance;
 use App\Console\StackaCommand;
 use App\Entity\Transaction;
 use Brick\Math\BigDecimal;
-use Brick\Math\RoundingMode;
 use Brick\Money\Context\AutoContext;
 use Brick\Money\Money;
 use Symfony\Component\Console\Attribute\AsCommand;
