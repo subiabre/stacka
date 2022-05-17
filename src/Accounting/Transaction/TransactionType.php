@@ -9,6 +9,8 @@ namespace App\Accounting\Transaction;
  */
 enum TransactionType: string
 {
+    public const MESSAGE_ERROR_UNKNOWN = "The type '%s' is not a valid Transaction type.";
+
     case Buy = 'buy';
     case Sale = 'sale';
 }
