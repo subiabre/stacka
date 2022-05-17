@@ -2,7 +2,7 @@
 
 namespace App\Accounting\Account;
 
-use App\Accounting\Inventory\Balance;
+use App\Accounting\Balance\Balance;
 use App\Entity\Transaction;
 use Brick\Math\BigDecimal;
 
@@ -16,25 +16,29 @@ class FifoAccount extends AbstractAccount
         return 'fifo';
     }
 
-    protected function sale(Transaction $transaction)
+    protected function sale(Transaction $transaction): array
     {
+        $inventory = $this->getInventory();
+
         $sold = $transaction->getBalance()->getAmount();
-        foreach ($this->balances as $key => $balance) {
+        foreach ($inventory as $key => $balance) {
             if ($sold->isZero()) {
                 break;
             }
 
             if ($balance->getAmount()->isGreaterThanOrEqualTo($sold)) {
                 $amount = $balance->getAmount()->minus($sold);
+                $money = $balance->getMoneyAverage()->multipliedBy($amount);
                 $sold = BigDecimal::of(0);
+
+                $inventory = array_replace($inventory, [$key => new Balance($amount, $money)]);
             } else {
-                $amount = BigDecimal::of(0);
                 $sold = $sold->minus($balance->getAmount());
+
+                $inventory = array_splice($inventory, $key, 1);
             }
-
-            $money = $balance->getMoneyAverage()->multipliedBy($amount);
-
-            $this->balances = array_replace($this->balances, [$key => new Balance($amount, $money)]);
         }
+
+        return $inventory;
     }
 }

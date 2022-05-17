@@ -2,10 +2,12 @@
 
 namespace App\Accounting\Account;
 
-use App\Accounting\Inventory\Balance;
+use App\Accounting\Balance\Balance;
 use App\Accounting\Transaction\TransactionType;
+use App\Entity\Asset;
 use App\Entity\Transaction;
 use Brick\Math\BigDecimal;
+use Brick\Money\Context\AutoContext;
 use Brick\Money\Money;
 
 /**
@@ -17,7 +19,14 @@ abstract class AbstractAccount
     protected array $history = [];
 
     /** @var Balance[] */
-    protected array $balances = [];
+    protected array $inventory = [];
+
+    protected Asset $asset;
+
+    public function __construct(Asset $asset)
+    {
+        $this->asset = $asset;
+    }
 
     abstract public static function getName();
 
@@ -26,22 +35,27 @@ abstract class AbstractAccount
         return $this->history;
     }
 
+    public function getInventory(): array
+    {
+        return $this->inventory;
+    }
+
+    public function getAsset(): Asset
+    {
+        return $this->asset;
+    }
+
     final public function getBalance(): Balance
     {
         $amount = BigDecimal::of(0);
-        $money = Money::of(0, 'USD');
+        $money = Money::of(0, $this->asset->getMoneyCurrency(), new AutoContext());
 
-        foreach ($this->balances as $balance) {
+        foreach ($this->inventory as $balance) {
             $amount = $amount->plus($balance->getAmount());
             $money = $money->plus($balance->getMoney());
         };
 
         return new Balance($amount, $money);
-    }
-
-    public function getBalances(): array
-    {
-        return $this->balances;
     }
 
     final public function record(Transaction $transaction): self
@@ -50,11 +64,11 @@ abstract class AbstractAccount
 
         switch ($transaction->getType()) {
             case TransactionType::Buy:
-                $this->buy($transaction);
+                $this->inventory = $this->buy($transaction);
                 break;
             
             case TransactionType::Sale:
-                $this->sale($transaction);
+                $this->inventory = $this->sale($transaction);
                 break;
         }
 
@@ -63,14 +77,16 @@ abstract class AbstractAccount
 
     /**
      * Process a `Transaction` of Buy type into the account
+     * @return array The resulting inventory
      */
-    final protected function buy(Transaction $transaction)
+    protected function buy(Transaction $transaction): array
     {
-        $this->balances = [...$this->balances, $transaction->getBalance()];
+        return [...$this->inventory, $transaction->getBalance()];
     }
 
     /**
      * Process a `Transaction` of Sale type into the account
+     * @return array The resulting inventory
      */
-    abstract protected function sale(Transaction $transaction);
+    abstract protected function sale(Transaction $transaction): array;
 }

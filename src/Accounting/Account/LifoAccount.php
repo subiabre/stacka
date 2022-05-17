@@ -14,9 +14,10 @@ class LifoAccount extends FifoAccount
         return 'lifo';
     }
     
-    protected function sale(Transaction $transaction)
+    protected function sale(Transaction $transaction): array
     {
-        $this->balances = array_reverse($this->balances);
-        parent::sale($transaction);
+        $this->inventory = array_reverse($this->inventory);
+        
+        return parent::sale($transaction);
     }
 }
