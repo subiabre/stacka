@@ -2,7 +2,7 @@
 
 namespace App\Entity;
 
-use App\Accounting\Inventory\Balance;
+use App\Accounting\Balance\Balance;
 use App\Accounting\Transaction\TransactionType;
 use App\Repository\TransactionRepository;
 use Doctrine\ORM\Mapping as ORM;
@@ -23,6 +23,10 @@ class Transaction
 
     #[ORM\Column(type: 'object')]
     private $type;
+
+    #[ORM\ManyToOne(targetEntity: Asset::class, inversedBy: 'transactions')]
+    #[ORM\JoinColumn(nullable: false)]
+    private $asset;
 
     #[ORM\Column(type: 'object')]
     private $balance;
@@ -57,6 +61,18 @@ class Transaction
     public function setType(TransactionType $type): self
     {
         $this->type = $type;
+
+        return $this;
+    }
+
+    public function getAsset(): ?Asset
+    {
+        return $this->asset;
+    }
+
+    public function setAsset(?Asset $asset): self
+    {
+        $this->asset = $asset;
 
         return $this;
     }
