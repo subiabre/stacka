@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Accounting\Inventory;
+namespace App\Accounting\Balance;
 
 use Brick\Math\BigDecimal;
 use Brick\Math\RoundingMode;
@@ -39,7 +39,7 @@ class Balance
     public function getMoneyAverage(): Money
     {
         return !$this->amount->isZero() 
-            ? $this->money->dividedBy($this->amount, RoundingMode::HALF_UP)
+            ? $this->money->dividedBy($this->amount)
             : Money::of(0, $this->money->getCurrency())
             ;
     }
