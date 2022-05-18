@@ -16,10 +16,10 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
 #[AsCommand(
-    name: 'app:add:transaction|new',
+    name: 'app:trx:add|new',
     description: 'Record a new Transaction',
 )]
-class AddTransactionCommand extends StackaCommand
+class TransactionAddCommand extends StackaCommand
 {
     protected function configure(): void
     {

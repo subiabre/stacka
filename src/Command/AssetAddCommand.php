@@ -13,18 +13,18 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
 #[AsCommand(
-    name: 'app:add:asset|add',
+    name: 'app:asset:add|add',
     description: 'Create a new Asset',
 )]
-class AddAssetCommand extends StackaCommand
+class AssetAddCommand extends StackaCommand
 {
     protected function configure(): void
     {
         $this
             ->addArgument('name', InputArgument::REQUIRED, 'The name of the asset')
-            ->addOption('asset.dateFormat', 'a.dF', InputOption::VALUE_OPTIONAL, 'The preferred locale for date formats', 'en')
-            ->addOption('asset.moneyFormat', 'a.mF', InputOption::VALUE_OPTIONAL, 'The preferred locale for monetary formats', 'en')
-            ->addOption('asset.moneyCurrency', 'a.mC', InputOption::VALUE_OPTIONAL, 'The currency of the monetary values', 'USD')
+            ->addOption('asset.dateFormat', 'asset.dF', InputOption::VALUE_OPTIONAL, 'The preferred locale for date formats', 'en')
+            ->addOption('asset.moneyFormat', 'asset.mF', InputOption::VALUE_OPTIONAL, 'The preferred locale for monetary formats', 'en')
+            ->addOption('asset.moneyCurrency', 'asset.mC', InputOption::VALUE_OPTIONAL, 'The currency of the monetary values', 'USD')
         ;
     }
 

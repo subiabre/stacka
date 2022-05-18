@@ -4,6 +4,7 @@ namespace App\Command;
 
 use App\Accounting\Account\AverageAccount;
 use App\Console\StackaCommand;
+use App\Entity\Transaction;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
@@ -12,10 +13,10 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
 #[AsCommand(
-    name: 'app:list:transaction|read',
+    name: 'app:trx:list|read',
     description: 'List the Transactions of a given Asset',
 )]
-class ListTransactionCommand extends StackaCommand
+class TransactionListCommand extends StackaCommand
 {
     protected function configure(): void
     {
@@ -34,17 +35,19 @@ class ListTransactionCommand extends StackaCommand
         $account = new AverageAccount($asset);
 
         $io->table([
-            'Type',
-            'Amount',
-            'Money',
-            'Money Average',
+            'T. ID',
+            'T. Type',
+            'T. Amount',
+            'T. Money',
+            'T. Average',
             'A. Amount',
             'A. Money',
-            'A. Money Average'
-        ], array_map(function($transaction) use ($account) {
-            $account->record($transaction);
+            'A. Average'
+        ], array_map(function(Transaction $transaction) use ($account) {
+            $account->addTransaction($transaction);
 
             return [
+                $transaction->getId(),
                 $transaction->getType()->value,
                 $transaction->getBalance()->getAmount(),
                 $transaction->getBalance()->getMoney(),
