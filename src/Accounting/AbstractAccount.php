@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Accounting\Account;
+namespace App\Accounting;
 
 use App\Accounting\Balance\Balance;
 use App\Accounting\Transaction\TransactionType;
@@ -22,14 +22,9 @@ abstract class AbstractAccount
     /** @var Balance[] */
     protected array $inventory = [];
 
-    protected Asset $asset;
+    abstract public static function getName(): string;
 
-    public function __construct(Asset $asset)
-    {
-        $this->asset = $asset;
-    }
-
-    abstract public static function getName();
+    abstract public static function getDescription(): string;
 
     public function getHistory(): array
     {
@@ -41,17 +36,16 @@ abstract class AbstractAccount
         return $this->inventory;
     }
 
-    public function getAsset(): Asset
+    final public function getBalance(): ?Balance
     {
-        return $this->asset;
-    }
+        $inventory = $this->getInventory();
 
-    final public function getBalance(): Balance
-    {
-        $amount = BigDecimal::of(0);
-        $money = Money::of(0, $this->asset->getMoneyCurrency(), new AutoContext());
+        if (count($inventory) < 1) return null;
 
-        foreach ($this->inventory as $balance) {
+        $amount = $inventory[0]->getBalance()->getAmount();
+        $money = $inventory[0]->getBalance()->getMoney();
+
+        foreach ($inventory as $balance) {
             $amount = $amount->plus($balance->getAmount());
             $money = $money->plus($balance->getMoney());
         };

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Accounting\Account;
+namespace App\Accounting;
 
 use App\Entity\Transaction;
 
@@ -9,9 +9,14 @@ use App\Entity\Transaction;
  */
 class LifoAccount extends FifoAccount
 {
-    public static function getName()
+    public static function getName(): string
     {
         return 'lifo';
+    }
+
+    public static function getDescription(): string
+    {
+        return 'The items you sold were the available items you purchased **last**';
     }
     
     protected function sale(Transaction $transaction): array

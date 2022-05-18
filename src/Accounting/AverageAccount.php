@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Accounting\Account;
+namespace App\Accounting;
 
 use App\Accounting\Balance\Balance;
 use App\Entity\Transaction;
@@ -10,9 +10,14 @@ use App\Entity\Transaction;
  */
 class AverageAccount extends FifoAccount
 {
-    public static function getName()
+    public static function getName(): string
     {
         return 'average';
+    }
+
+    public static function getDescription(): string
+    {
+        return 'The items you sold had an homogenous cost calculated by average of the available inventory';
     }
 
     protected function sale(Transaction $transaction): array

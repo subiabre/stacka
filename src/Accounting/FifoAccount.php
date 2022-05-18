@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Accounting\Account;
+namespace App\Accounting;
 
 use App\Accounting\Balance\Balance;
 use App\Entity\Transaction;
@@ -11,9 +11,14 @@ use Brick\Math\BigDecimal;
  */
 class FifoAccount extends AbstractAccount
 {
-    public static function getName()
+    public static function getName(): string
     {
         return 'fifo';
+    }
+
+    public static function getDescription(): string
+    {
+        return 'The items you sold were the available items you purchased **first**';
     }
 
     protected function sale(Transaction $transaction): array
