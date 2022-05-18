@@ -9,6 +9,7 @@ use App\Entity\Transaction;
 use Brick\Math\BigDecimal;
 use Brick\Money\Context\AutoContext;
 use Brick\Money\Money;
+use Doctrine\Common\Collections\Collection;
 
 /**
  * An accounting `Account` holds an historic of `Transaction` elements and checks the produced `Balance`
@@ -58,7 +59,16 @@ abstract class AbstractAccount
         return new Balance($amount, $money);
     }
 
-    final public function record(Transaction $transaction): self
+    final public function setTransactions(Collection $transactions): self
+    {
+        foreach ($transactions->toArray() as $transaction) {
+            $this->addTransaction($transaction);
+        }
+
+        return $this;
+    }
+
+    final public function addTransaction(Transaction $transaction): self
     {
         $this->history = [...$this->history, $transaction];
 
