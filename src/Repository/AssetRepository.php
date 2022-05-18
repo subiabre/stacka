@@ -49,6 +49,9 @@ class AssetRepository extends ServiceEntityRepository
         ;
     }
 
+    /**
+     * @return Asset[]
+     */
     public function findLikeName(string $name): array
     {
         return $this->createQueryBuilder('a')
