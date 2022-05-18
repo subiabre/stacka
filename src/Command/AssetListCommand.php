@@ -46,8 +46,8 @@ class AssetListCommand extends StackaCommand
                 $asset->getName(),
                 count($asset->getTransactions()),
                 $account->getBalance()->getAmount(),
-                $account->getBalance()->getMoney(),
-                $account->getBalance()->getMoneyAverage()
+                $account->getBalance()->getMoney()->formatTo($asset->getMoneyFormat()),
+                $account->getBalance()->getMoneyAverage()->formatTo($asset->getMoneyFormat())
             ];
         }, $assets));
 

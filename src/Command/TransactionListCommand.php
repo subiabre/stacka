@@ -36,6 +36,7 @@ class TransactionListCommand extends StackaCommand
 
         $io->table([
             'T. ID',
+            'T. Date',
             'T. Type',
             'T. Amount',
             'T. Money',
@@ -44,17 +45,20 @@ class TransactionListCommand extends StackaCommand
             'A. Money',
             'A. Average'
         ], array_map(function(Transaction $transaction) use ($account) {
+            $asset = $transaction->getAsset();
+
             $account->addTransaction($transaction);
 
             return [
                 $transaction->getId(),
+                $transaction->getDateFormatted(),
                 $transaction->getType()->value,
                 $transaction->getBalance()->getAmount(),
-                $transaction->getBalance()->getMoney(),
-                $transaction->getBalance()->getMoneyAverage(),
+                $transaction->getBalance()->getMoney()->formatTo($asset->getMoneyFormat()),
+                $transaction->getBalance()->getMoneyAverage()->formatTo($asset->getMoneyFormat()),
                 $account->getBalance()->getAmount(),
-                $account->getBalance()->getMoney(),
-                $account->getBalance()->getMoneyAverage(),
+                $account->getBalance()->getMoney()->formatTo($asset->getMoneyFormat()),
+                $account->getBalance()->getMoneyAverage()->formatTo($asset->getMoneyFormat()),
             ];
         }, $asset->getTransactions()->toArray()));
 
