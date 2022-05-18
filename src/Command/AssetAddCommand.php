@@ -43,7 +43,7 @@ class AssetAddCommand extends StackaCommand
         $errors = $this->validator->validate($asset);
         if (count($errors) > 0) {
             foreach ($errors as $error) {
-                $io->error([$error->getPropertyPath(), $error->getMessage()]);
+                $io->error([$error->getPropertyPath(), sprintf($error->getMessage(), $input->getArgument('name'))]);
             }
 
             return Command::FAILURE;
@@ -51,6 +51,8 @@ class AssetAddCommand extends StackaCommand
         
         $this->entityManager->persist($asset);
         $this->entityManager->flush();
+
+        $io->success(sprintf(Asset::MESSAGE_SUCCESS_CREATED, $asset->getName()));
 
         return Command::SUCCESS;
     }
