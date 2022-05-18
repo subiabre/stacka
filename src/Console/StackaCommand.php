@@ -2,6 +2,7 @@
 
 namespace App\Console;
 
+use App\Accounting\AccountLocator;
 use App\Accounting\Transaction\TransactionType;
 use App\Entity\Asset;
 use App\Repository\AssetRepository;
@@ -19,12 +20,14 @@ abstract class StackaCommand extends Command
     protected TransactionRepository $transactionRepository;
     protected ValidatorInterface $validator;
     protected EntityManagerInterface $entityManager;
+    protected AccountLocator $accountLocator;
 
     public function __construct(
         AssetRepository $assetRepository,
         TransactionRepository $transactionRepository,
         ValidatorInterface $validatorInterface,
         EntityManagerInterface $entityManagerInterface,
+        AccountLocator $accountLocator
     ) {
         parent::__construct();
         
@@ -32,6 +35,7 @@ abstract class StackaCommand extends Command
         $this->transactionRepository = $transactionRepository;
         $this->validator = $validatorInterface;
         $this->entityManager = $entityManagerInterface;
+        $this->accountLocator = $accountLocator;
     }
 
     protected function getAsset(InputInterface $input, OutputInterface $output, string $argument): ?Asset
