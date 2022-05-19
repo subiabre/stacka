@@ -13,13 +13,13 @@ class Balance
 {
     private BigDecimal $amount;
 
-    private Money $money;
+    private BigDecimal $money;
 
     /**
      * @param BigDecimal $amount Any unit value
-     * @param Money $money The total money value for the given amount
+     * @param BigDecimal $money The total money value for the given amount
      */
-    public function __construct(BigDecimal $amount, Money $money)
+    public function __construct(BigDecimal $amount, BigDecimal $money)
     {
         $this->amount = $amount;
         $this->money = $money;
@@ -30,16 +30,16 @@ class Balance
         return $this->amount;
     }
 
-    public function getMoney(): Money
+    public function getMoney(): BigDecimal
     {
         return $this->money;
     }
 
-    public function getMoneyAverage(): Money
+    public function getMoneyAverage(): BigDecimal
     {
         return !$this->amount->isZero() 
             ? $this->money->dividedBy($this->amount)
-            : Money::of(0, $this->money->getCurrency())
+            : $this->amount
             ;
     }
 }

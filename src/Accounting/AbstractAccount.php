@@ -5,6 +5,8 @@ namespace App\Accounting;
 use App\Accounting\Balance\Balance;
 use App\Accounting\Transaction\TransactionType;
 use App\Entity\Transaction;
+use Brick\Math\BigDecimal;
+use Brick\Money\Money;
 use Doctrine\Common\Collections\Collection;
 
 /**
@@ -12,11 +14,15 @@ use Doctrine\Common\Collections\Collection;
  */
 abstract class AbstractAccount
 {
+    public const MESSAGE_ERROR_UNKNOWN = "The key '%s' does not match to any available Accounting name.";
+
     /** @var Transaction[] */
     protected array $history = [];
 
     /** @var Balance[] */
     protected array $inventory = [];
+
+    protected string $currency;
 
     abstract public static function getName(): string;
 
@@ -34,14 +40,10 @@ abstract class AbstractAccount
 
     final public function getBalance(): ?Balance
     {
-        $inventory = $this->getInventory();
+        $amount = BigDecimal::of(0);
+        $money = BigDecimal::of(0);
 
-        if (count($inventory) < 1) return null;
-
-        $amount = $inventory[0]->getBalance()->getAmount();
-        $money = $inventory[0]->getBalance()->getMoney();
-
-        foreach ($inventory as $balance) {
+        foreach ($this->inventory as $balance) {
             $amount = $amount->plus($balance->getAmount());
             $money = $money->plus($balance->getMoney());
         };

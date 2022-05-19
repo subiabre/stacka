@@ -43,7 +43,7 @@ class TransactionAddCommand extends StackaCommand
 
         $balance = new Balance(
             BigDecimal::of($input->getArgument('amount')),
-            Money::of($input->getArgument('money'), $asset->getMoneyCurrency(), new AutoContext())
+            BigDecimal::of($input->getArgument('money'))
         );
         
         $transaction = new Transaction();
