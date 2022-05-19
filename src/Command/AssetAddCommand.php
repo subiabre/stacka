@@ -22,6 +22,7 @@ class AssetAddCommand extends StackaCommand
     {
         $this
             ->addArgument('name', InputArgument::REQUIRED, 'The name of the asset')
+            ->addOption('asset.accounting', 'asset.a', InputOption::VALUE_OPTIONAL, 'The preferred accounting name', 'average')
             ->addOption('asset.dateFormat', 'asset.dF', InputOption::VALUE_OPTIONAL, 'The preferred locale for date formats', 'en')
             ->addOption('asset.moneyFormat', 'asset.mF', InputOption::VALUE_OPTIONAL, 'The preferred locale for monetary formats', 'en')
             ->addOption('asset.moneyCurrency', 'asset.mC', InputOption::VALUE_OPTIONAL, 'The currency of the monetary values', 'USD')
@@ -31,10 +32,14 @@ class AssetAddCommand extends StackaCommand
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $io = new SymfonyStyle($input, $output);
+
+        $account = $this->getAccount($input, $output, 'asset.accounting');
+        if (!$account) return Command::FAILURE;
         
         $asset = new Asset();
         $asset
             ->setName($input->getArgument('name'))
+            ->setAccount($account)
             ->setDateFormat($input->getOption('asset.dateFormat'))
             ->setMoneyFormat($input->getOption('asset.moneyFormat'))
             ->setMoneyCurrency($input->getOption('asset.moneyCurrency'))

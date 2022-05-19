@@ -23,9 +23,10 @@ class AssetEditCommand extends StackaCommand
         $this
             ->addArgument('asset', InputArgument::REQUIRED, 'The name of the asset to be edited')
             ->addArgument('name', InputArgument::OPTIONAL, 'The new name of the asset')
-            ->addOption('asset.dateFormat', 'asset.dF', InputOption::VALUE_OPTIONAL, 'The preferred locale for date formats', 'en')
-            ->addOption('asset.moneyFormat', 'asset.mF', InputOption::VALUE_OPTIONAL, 'The preferred locale for monetary formats', 'en')
-            ->addOption('asset.moneyCurrency', 'asset.mC', InputOption::VALUE_OPTIONAL, 'The currency of the monetary values', 'USD')
+            ->addOption('asset.accounting', 'asset.a', InputOption::VALUE_OPTIONAL, 'The preferred accounting name', null)
+            ->addOption('asset.dateFormat', 'asset.dF', InputOption::VALUE_OPTIONAL, 'The preferred locale for date formats', null)
+            ->addOption('asset.moneyFormat', 'asset.mF', InputOption::VALUE_OPTIONAL, 'The preferred locale for monetary formats', null)
+            ->addOption('asset.moneyCurrency', 'asset.mC', InputOption::VALUE_OPTIONAL, 'The currency of the monetary values', null)
         ;
     }
 
@@ -36,11 +37,19 @@ class AssetEditCommand extends StackaCommand
         $asset = $this->getAsset($input, $output, 'asset');
         if (!$asset) return Command::FAILURE;
 
+        $account = $input->getOption('asset.accounting') 
+            ? $this->getAccount($input, $output, 'asset.accounting')
+            : $asset->getAccount()
+            ;
+
+        if (!$account) return Command::FAILURE;
+
         $asset
             ->setName($input->getArgument('name') ?? $asset->getName())
-            ->setDateFormat($input->getOption('asset.dateFormat'))
-            ->setMoneyFormat($input->getOption('asset.moneyFormat'))
-            ->setMoneyCurrency($input->getOption('asset.moneyCurrency'))
+            ->setAccount($account)
+            ->setDateFormat($input->getOption('asset.dateFormat') ?? $asset->getDateFormat())
+            ->setMoneyFormat($input->getOption('asset.moneyFormat') ?? $asset->getMoneyFormat())
+            ->setMoneyCurrency($input->getOption('asset.moneyCurrency') ?? $asset->getMoneyCurrency())
             ;
 
         $errors = $this->validator->validate($asset);

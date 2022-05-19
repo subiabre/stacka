@@ -35,6 +35,7 @@ class AssetInfoCommand extends StackaCommand
         $io->definitionList(
             ['Name' => $asset->getName()],
             ['Transaction count' => $asset->getTransactions()->count()],
+            ['Accounting' => $asset->getAccount()->getName()],
             new TableSeparator(),
             ['Date Formatting' => $asset->getDateFormat()],
             new TableSeparator(),

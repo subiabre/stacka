@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use App\Accounting\AbstractAccount;
 use App\Repository\AssetRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -32,6 +33,9 @@ class Asset
     #[Assert\NotBlank()]
     #[ORM\Column(type: 'string', length: 24)]
     private $name;
+
+    #[ORM\Column(type: 'object')]
+    private $account;
 
     #[ORM\OneToMany(mappedBy: 'asset', targetEntity: Transaction::class, orphanRemoval: true)]
     private $transactions;
@@ -69,6 +73,18 @@ class Asset
     public function setName(string $name): self
     {
         $this->name = $name;
+
+        return $this;
+    }
+
+    public function getAccount(): ?AbstractAccount
+    {
+        return $this->account;
+    }
+
+    public function setAccount(AbstractAccount $account): self
+    {
+        $this->account = $account;
 
         return $this;
     }
