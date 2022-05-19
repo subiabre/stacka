@@ -13,6 +13,11 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\Entity(repositoryClass: TransactionRepository::class)]
 class Transaction
 {
+    public const MESSAGE_ERROR_MISSING = "The transaction '%d' does not exist.";
+
+    public const MESSAGE_SUCCESS_REMOVED = "The transaction '%d' was successfully deleted.";
+    public const MESSAGE_SUCCESS_CREATED = "The transaction '%d' was successfully created.";
+
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
