@@ -2,9 +2,9 @@
 
 namespace App\Command;
 
-use App\Accounting\Account\AverageAccount;
 use App\Console\StackaCommand;
 use App\Entity\Asset;
+use App\Service\AssetFormatterService;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
@@ -38,7 +38,8 @@ class AssetListCommand extends StackaCommand
             'Money',
             'Average'
         ], array_map(function(Asset $asset) {
-            $account = new AverageAccount($asset);
+            $account = $asset->getAccount();
+            $formatter = new AssetFormatterService($asset);
 
             $account->setTransactions($asset->getTransactions());
 
@@ -46,8 +47,8 @@ class AssetListCommand extends StackaCommand
                 $asset->getName(),
                 count($asset->getTransactions()),
                 $account->getBalance()->getAmount(),
-                $account->getBalance()->getMoney()->formatTo($asset->getMoneyFormat()),
-                $account->getBalance()->getMoneyAverage()->formatTo($asset->getMoneyFormat())
+                $formatter->money($account->getBalance()->getMoney()),
+                $formatter->money($account->getBalance()->getMoneyAverage())
             ];
         }, $assets));
 

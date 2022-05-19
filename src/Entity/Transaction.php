@@ -46,17 +46,6 @@ class Transaction
         return $this->date;
     }
 
-    public function getDateFormatted(): string
-    {
-        $formatter = new \IntlDateFormatter(
-            $this->asset->getDateFormat(),
-            \IntlDateFormatter::SHORT,
-            \IntlDateFormatter::SHORT
-        );
-
-        return $formatter->format($this->date);
-    }
-
     public function setDate(\DateTimeInterface $date): self
     {
         $this->date = $date;

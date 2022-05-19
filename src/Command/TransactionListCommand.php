@@ -2,9 +2,9 @@
 
 namespace App\Command;
 
-use App\Accounting\Account\AverageAccount;
 use App\Console\StackaCommand;
 use App\Entity\Transaction;
+use App\Service\AssetFormatterService;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
@@ -32,7 +32,8 @@ class TransactionListCommand extends StackaCommand
         $asset = $this->getAsset($input, $output, 'asset');
         if (!$asset) return Command::FAILURE;
 
-        $account = new AverageAccount($asset);
+        $account = $asset->getAccount();
+        $formatter = new AssetFormatterService($asset);
 
         $io->table([
             'T. ID',
@@ -44,21 +45,19 @@ class TransactionListCommand extends StackaCommand
             'A. Amount',
             'A. Money',
             'A. Average'
-        ], array_map(function(Transaction $transaction) use ($account) {
-            $asset = $transaction->getAsset();
-
+        ], array_map(function(Transaction $transaction) use ($account, $formatter) {
             $account->addTransaction($transaction);
 
             return [
                 $transaction->getId(),
-                $transaction->getDateFormatted(),
+                $formatter->date($transaction->getDate()),
                 $transaction->getType()->value,
                 $transaction->getBalance()->getAmount(),
-                $transaction->getBalance()->getMoney()->formatTo($asset->getMoneyFormat()),
-                $transaction->getBalance()->getMoneyAverage()->formatTo($asset->getMoneyFormat()),
+                $formatter->money($transaction->getBalance()->getMoney()),
+                $formatter->money($transaction->getBalance()->getMoneyAverage()),
                 $account->getBalance()->getAmount(),
-                $account->getBalance()->getMoney()->formatTo($asset->getMoneyFormat()),
-                $account->getBalance()->getMoneyAverage()->formatTo($asset->getMoneyFormat()),
+                $formatter->money($account->getBalance()->getMoney()),
+                $formatter->money($account->getBalance()->getMoneyAverage())
             ];
         }, $asset->getTransactions()->toArray()));
 
