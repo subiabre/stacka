@@ -14,7 +14,7 @@ use Symfony\Component\Console\Style\SymfonyStyle;
     name: 'app:account:list|accountings',
     description: 'List the available accounting models',
 )]
-class AssetListCommand extends StackaCommand
+class AccountingListCommand extends StackaCommand
 {
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
