@@ -2,6 +2,7 @@
 
 namespace App\Console;
 
+use App\Accounting\AbstractAccount;
 use App\Accounting\AccountLocator;
 use App\Accounting\Transaction\TransactionType;
 use App\Entity\Asset;
@@ -67,5 +68,20 @@ abstract class StackaCommand extends Command
         }
 
         return $type;
+    }
+
+    protected function getAccount(InputInterface $input, OutputInterface $output, string $option): ?AbstractAccount
+    {
+        $io = new SymfonyStyle($input, $output);
+        
+        $name = $input->getOption($option);
+        $account = $this->accountLocator->filterByName($name);
+
+        if (!$account) {
+            $io->error(sprintf(AbstractAccount::MESSAGE_ERROR_UNKNOWN, $name));
+            return null;
+        }
+
+        return $account;
     }
 }
