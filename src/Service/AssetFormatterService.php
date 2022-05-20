@@ -20,7 +20,8 @@ class AssetFormatterService
         $formatter = new \IntlDateFormatter(
             $this->asset->getDateFormat(),
             \IntlDateFormatter::SHORT,
-            \IntlDateFormatter::SHORT
+            \IntlDateFormatter::SHORT,
+            $date->getTimezone()
         );
 
         return $formatter->format($date);

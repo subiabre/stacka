@@ -23,7 +23,7 @@ class Transaction
     #[ORM\Column(type: 'integer')]
     private $id;
 
-    #[ORM\Column(type: 'date')]
+    #[ORM\Column(type: 'datetimetz')]
     private $date;
 
     #[ORM\Column(type: 'object')]

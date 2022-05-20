@@ -12,6 +12,9 @@ RUN docker-php-ext-install \
     intl \
     pdo pdo_mysql
 
+# PHP config
+COPY docker/php/conf.d /usr/local/etc/php/conf.d
+
 # Set app dir
 ADD . /app
 WORKDIR /app
