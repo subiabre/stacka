@@ -4,6 +4,8 @@ namespace App\Console;
 
 use App\Accounting\AbstractAccount;
 use App\Accounting\AccountLocator;
+use App\Accounting\Rounding\RoundingInterface;
+use App\Accounting\Rounding\RoundingLocator;
 use App\Accounting\Transaction\TransactionType;
 use App\Entity\Asset;
 use App\Repository\AssetRepository;
@@ -22,13 +24,15 @@ abstract class StackaCommand extends Command
     protected ValidatorInterface $validator;
     protected EntityManagerInterface $entityManager;
     protected AccountLocator $accountLocator;
+    protected RoundingLocator $roundingLocator;
 
     public function __construct(
         AssetRepository $assetRepository,
         TransactionRepository $transactionRepository,
         ValidatorInterface $validatorInterface,
         EntityManagerInterface $entityManagerInterface,
-        AccountLocator $accountLocator
+        AccountLocator $accountLocator,
+        RoundingLocator $roundingLocator
     ) {
         parent::__construct();
         
@@ -37,6 +41,7 @@ abstract class StackaCommand extends Command
         $this->validator = $validatorInterface;
         $this->entityManager = $entityManagerInterface;
         $this->accountLocator = $accountLocator;
+        $this->roundingLocator = $roundingLocator;
     }
 
     protected function getAsset(InputInterface $input, OutputInterface $output, string $argument): ?Asset
@@ -83,5 +88,20 @@ abstract class StackaCommand extends Command
         }
 
         return $account;
+    }
+
+    protected function getRounding(InputInterface $input, OutputInterface $output, string $option): ?RoundingInterface
+    {
+        $io = new SymfonyStyle($input, $output);
+        
+        $name = $input->getOption($option);
+        $rounding = $this->roundingLocator->filterByName($name);
+
+        if (!$rounding) {
+            $io->error(sprintf(RoundingInterface::MESSAGE_ERROR_UNKNOWN, $name));
+            return null;
+        }
+
+        return $rounding;
     }
 }
