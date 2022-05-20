@@ -40,7 +40,7 @@ class FifoAccount extends AbstractAccount
             } else {
                 $sold = $sold->minus($balance->getAmount());
 
-                $inventory = array_splice($inventory, $key, 1);
+                $inventory = [...array_slice($inventory, 0, $key), ...array_slice($inventory, $key + 1)];
             }
         }
 
