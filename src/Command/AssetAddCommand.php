@@ -23,12 +23,12 @@ class AssetAddCommand extends StackaCommand
     {
         $this
             ->addArgument('name', InputArgument::REQUIRED, 'The name of the asset')
-            ->addOption('asset.accounting', 'asset.a', InputOption::VALUE_OPTIONAL, 'The preferred accounting name', 'average')
-            ->addOption('asset.dateFormat', 'asset.dF', InputOption::VALUE_OPTIONAL, 'The preferred locale for date formats', 'en')
-            ->addOption('asset.moneyFormat', 'asset.mF', InputOption::VALUE_OPTIONAL, 'The preferred locale for monetary formats', 'en')
-            ->addOption('asset.moneyCurrency', 'asset.mC', InputOption::VALUE_OPTIONAL, 'The currency of the monetary values', 'USD')
-            ->addOption('asset.moneyScale', 'asset.mS', InputOption::VALUE_OPTIONAL, 'The number of zeroes to keep in monetary values', 2)
-            ->addOption('asset.moneyRounding', 'asset.mR', InputOption::VALUE_OPTIONAL, 'The rounding mode to apply in monetary calculations', 'half-even')
+            ->addOption('asset.accounting', null, InputOption::VALUE_OPTIONAL, 'The preferred accounting name', 'average')
+            ->addOption('asset.dateFormat', null, InputOption::VALUE_OPTIONAL, 'The preferred locale for date formats', 'en')
+            ->addOption('asset.moneyFormat', null, InputOption::VALUE_OPTIONAL, 'The preferred locale for monetary formats', 'en')
+            ->addOption('asset.moneyCurrency', null, InputOption::VALUE_OPTIONAL, 'The currency of the monetary values', 'USD')
+            ->addOption('asset.moneyScale', null, InputOption::VALUE_OPTIONAL, 'The number of zeroes to keep in monetary values', 2)
+            ->addOption('asset.moneyRounding', null, InputOption::VALUE_OPTIONAL, 'The rounding mode to apply in monetary calculations', 'half-even')
         ;
     }
 
