@@ -28,6 +28,7 @@ class AssetEditCommand extends StackaCommand
             ->addOption('asset.moneyFormat', 'asset.mF', InputOption::VALUE_OPTIONAL, 'The preferred locale for monetary formats', null)
             ->addOption('asset.moneyCurrency', 'asset.mC', InputOption::VALUE_OPTIONAL, 'The currency of the monetary values', null)
             ->addOption('asset.moneyScale', 'asset.mS', InputOption::VALUE_OPTIONAL, 'The number of zeroes to keep in monetary values', null)
+            ->addOption('asset.moneyRounding', 'asset.mR', InputOption::VALUE_OPTIONAL, 'The rounding mode to apply in monetary calculations', null)
         ;
     }
 
@@ -45,6 +46,13 @@ class AssetEditCommand extends StackaCommand
 
         if (!$account) return Command::FAILURE;
 
+        $rounding = $input->getOption('asset.moneyRounding')
+            ? $this->getRounding($input, $output, 'asset.moneyRounding')
+            : $asset->getMoneyRounding()
+            ;
+
+        if (!$rounding) return Command::FAILURE;
+
         $asset
             ->setName($input->getArgument('name') ?? $asset->getName())
             ->setAccount($account)
@@ -52,6 +60,7 @@ class AssetEditCommand extends StackaCommand
             ->setMoneyFormat($input->getOption('asset.moneyFormat') ?? $asset->getMoneyFormat())
             ->setMoneyCurrency($input->getOption('asset.moneyCurrency') ?? $asset->getMoneyCurrency())
             ->setMoneyScale($input->getOption('asset.moneyScale') ?? $asset->getMoneyScale())
+            ->setMoneyRounding($rounding)
             ;
 
         $errors = $this->validator->validate($asset);

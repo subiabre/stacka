@@ -35,7 +35,7 @@ class AssetFormatterService
             $money,
             $this->asset->getMoneyCurrency(),
             new CustomContext($this->asset->getMoneyScale()),
-            RoundingMode::HALF_UP
+            $this->asset->getMoneyRounding()->getValue()
         );
     }
 

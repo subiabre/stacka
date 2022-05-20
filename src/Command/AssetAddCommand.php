@@ -2,6 +2,7 @@
 
 namespace App\Command;
 
+use App\Accounting\Balance\Rounding;
 use App\Console\StackaCommand;
 use App\Entity\Asset;
 use Symfony\Component\Console\Attribute\AsCommand;
@@ -27,6 +28,7 @@ class AssetAddCommand extends StackaCommand
             ->addOption('asset.moneyFormat', 'asset.mF', InputOption::VALUE_OPTIONAL, 'The preferred locale for monetary formats', 'en')
             ->addOption('asset.moneyCurrency', 'asset.mC', InputOption::VALUE_OPTIONAL, 'The currency of the monetary values', 'USD')
             ->addOption('asset.moneyScale', 'asset.mS', InputOption::VALUE_OPTIONAL, 'The number of zeroes to keep in monetary values', 2)
+            ->addOption('asset.moneyRounding', 'asset.mR', InputOption::VALUE_OPTIONAL, 'The rounding mode to apply in monetary calculations', 'half-even')
         ;
     }
 
@@ -36,6 +38,9 @@ class AssetAddCommand extends StackaCommand
 
         $account = $this->getAccount($input, $output, 'asset.accounting');
         if (!$account) return Command::FAILURE;
+
+        $rounding = $this->getRounding($input, $output, 'asset.moneyRounding');
+        if (!$rounding) return Command::FAILURE;
         
         $asset = new Asset();
         $asset
@@ -45,6 +50,7 @@ class AssetAddCommand extends StackaCommand
             ->setMoneyFormat($input->getOption('asset.moneyFormat'))
             ->setMoneyCurrency($input->getOption('asset.moneyCurrency'))
             ->setMoneyScale($input->getOption('asset.moneyScale'))
+            ->setMoneyRounding($rounding)
             ;
 
         $errors = $this->validator->validate($asset);

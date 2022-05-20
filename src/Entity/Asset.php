@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Accounting\AbstractAccount;
+use App\Accounting\Rounding\RoundingInterface;
 use App\Repository\AssetRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -59,6 +60,9 @@ class Asset
     #[Assert\NotBlank()]
     #[ORM\Column(type: 'integer')]
     private $moneyScale;
+
+    #[ORM\Column(type: 'object')]
+    private $moneyRounding;
 
     public function __construct()
     {
@@ -168,6 +172,18 @@ class Asset
     public function setMoneyScale(int $moneyScale): self
     {
         $this->moneyScale = $moneyScale;
+
+        return $this;
+    }
+
+    public function getMoneyRounding(): ?RoundingInterface
+    {
+        return $this->moneyRounding;
+    }
+
+    public function setMoneyRounding(RoundingInterface $moneyRounding): self
+    {
+        $this->moneyRounding = $moneyRounding;
 
         return $this;
     }
