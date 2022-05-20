@@ -3,7 +3,7 @@
 namespace App\Accounting\Balance;
 
 use Brick\Math\BigDecimal;
-use Brick\Money\Money;
+use Brick\Math\RoundingMode;
 
 /**
  * A `Balance` holds a relationship between an homogenous inventory amount and a monetary amount\
@@ -38,7 +38,7 @@ class Balance
     public function getMoneyAverage(): BigDecimal
     {
         return !$this->amount->isZero() 
-            ? $this->money->dividedBy($this->amount)
+            ? $this->money->dividedBy($this->amount, null, RoundingMode::HALF_UP)
             : $this->amount
             ;
     }
