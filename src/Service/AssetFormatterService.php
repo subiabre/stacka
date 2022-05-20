@@ -4,6 +4,8 @@ namespace App\Service;
 
 use App\Entity\Asset;
 use Brick\Math\BigNumber;
+use Brick\Math\RoundingMode;
+use Brick\Money\Context\CustomContext;
 use Brick\Money\Money;
 
 class AssetFormatterService
@@ -29,7 +31,12 @@ class AssetFormatterService
 
     private function toCurrency(BigNumber $money)
     {
-        return Money::of($money, $this->asset->getMoneyCurrency());
+        return Money::of(
+            $money,
+            $this->asset->getMoneyCurrency(),
+            new CustomContext($this->asset->getMoneyScale()),
+            RoundingMode::HALF_UP
+        );
     }
 
     public function money(BigNumber $money)

@@ -27,6 +27,7 @@ class AssetEditCommand extends StackaCommand
             ->addOption('asset.dateFormat', 'asset.dF', InputOption::VALUE_OPTIONAL, 'The preferred locale for date formats', null)
             ->addOption('asset.moneyFormat', 'asset.mF', InputOption::VALUE_OPTIONAL, 'The preferred locale for monetary formats', null)
             ->addOption('asset.moneyCurrency', 'asset.mC', InputOption::VALUE_OPTIONAL, 'The currency of the monetary values', null)
+            ->addOption('asset.moneyScale', 'asset.mS', InputOption::VALUE_OPTIONAL, 'The number of zeroes to keep in monetary values', null)
         ;
     }
 
@@ -50,6 +51,7 @@ class AssetEditCommand extends StackaCommand
             ->setDateFormat($input->getOption('asset.dateFormat') ?? $asset->getDateFormat())
             ->setMoneyFormat($input->getOption('asset.moneyFormat') ?? $asset->getMoneyFormat())
             ->setMoneyCurrency($input->getOption('asset.moneyCurrency') ?? $asset->getMoneyCurrency())
+            ->setMoneyScale($input->getOption('asset.moneyScale') ?? $asset->getMoneyScale())
             ;
 
         $errors = $this->validator->validate($asset);

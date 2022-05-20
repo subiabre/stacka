@@ -55,6 +55,11 @@ class Asset
     #[ORM\Column(type: 'string', length: 255)]
     private $moneyCurrency;
 
+    #[Assert\PositiveOrZero()]
+    #[Assert\NotBlank()]
+    #[ORM\Column(type: 'integer')]
+    private $moneyScale;
+
     public function __construct()
     {
         $this->transactions = new ArrayCollection();
@@ -151,6 +156,18 @@ class Asset
     public function setMoneyCurrency(string $moneyCurrency): self
     {
         $this->moneyCurrency = $moneyCurrency;
+
+        return $this;
+    }
+
+    public function getMoneyScale(): ?int
+    {
+        return $this->moneyScale;
+    }
+
+    public function setMoneyScale(int $moneyScale): self
+    {
+        $this->moneyScale = $moneyScale;
 
         return $this;
     }
