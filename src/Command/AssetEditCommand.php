@@ -23,11 +23,11 @@ class AssetEditCommand extends StackaCommand
         $this
             ->addArgument('asset', InputArgument::REQUIRED, 'The name of the asset to be edited')
             ->addArgument('name', InputArgument::OPTIONAL, 'The new name of the asset')
-            ->addOption('asset.accounting', null, InputOption::VALUE_OPTIONAL, 'The preferred accounting name', null)
+            ->addOption('asset.accounting', null, InputOption::VALUE_OPTIONAL, 'The name of the accounting method to be used', null)
             ->addOption('asset.dateFormat', null, InputOption::VALUE_OPTIONAL, 'The preferred locale for date formats', null)
             ->addOption('asset.moneyFormat', null, InputOption::VALUE_OPTIONAL, 'The preferred locale for monetary formats', null)
             ->addOption('asset.moneyCurrency', null, InputOption::VALUE_OPTIONAL, 'The currency of the monetary values', null)
-            ->addOption('asset.moneyScale', null, InputOption::VALUE_OPTIONAL, 'The number of zeroes to keep in monetary values', null)
+            ->addOption('asset.moneyScale', null, InputOption::VALUE_OPTIONAL, 'The number of decimal places to keep in monetary values', null)
             ->addOption('asset.moneyRounding', null, InputOption::VALUE_OPTIONAL, 'The rounding mode to apply in monetary calculations', null)
         ;
     }
