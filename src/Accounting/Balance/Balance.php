@@ -2,8 +2,7 @@
 
 namespace App\Accounting\Balance;
 
-use Brick\Math\BigDecimal;
-use Brick\Math\RoundingMode;
+use Brick\Math\BigRational;
 
 /**
  * A `Balance` holds a relationship between an homogenous inventory amount and a monetary amount\
@@ -11,34 +10,34 @@ use Brick\Math\RoundingMode;
  */
 class Balance
 {
-    private BigDecimal $amount;
+    private BigRational $amount;
 
-    private BigDecimal $money;
+    private BigRational $money;
 
     /**
-     * @param BigDecimal $amount Any unit value
-     * @param BigDecimal $money The total money value for the given amount
+     * @param BigRational $amount Any unit value
+     * @param BigRational $money The total money value for the given amount
      */
-    public function __construct(BigDecimal $amount, BigDecimal $money)
+    public function __construct(BigRational $amount, BigRational $money)
     {
         $this->amount = $amount;
         $this->money = $money;
     }
 
-    public function getAmount(): BigDecimal
+    public function getAmount(): BigRational
     {
         return $this->amount;
     }
 
-    public function getMoney(): BigDecimal
+    public function getMoney(): BigRational
     {
         return $this->money;
     }
 
-    public function getMoneyAverage(): BigDecimal
+    public function getMoneyAverage(): BigRational
     {
         return !$this->amount->isZero() 
-            ? $this->money->dividedBy($this->amount, null, RoundingMode::HALF_UP)
+            ? $this->money->toBigRational()->dividedBy($this->amount->toBigRational())
             : $this->amount
             ;
     }

@@ -5,9 +5,7 @@ namespace App\Command;
 use App\Accounting\Balance\Balance;
 use App\Console\StackaCommand;
 use App\Entity\Transaction;
-use Brick\Math\BigDecimal;
-use Brick\Money\Context\AutoContext;
-use Brick\Money\Money;
+use Brick\Math\BigRational;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
@@ -42,8 +40,8 @@ class TransactionAddCommand extends StackaCommand
         if (!$type) return Command::FAILURE;
 
         $balance = new Balance(
-            BigDecimal::of($input->getArgument('amount')),
-            BigDecimal::of($input->getArgument('money'))
+            BigRational::of($input->getArgument('amount')),
+            BigRational::of($input->getArgument('money'))
         );
         
         $transaction = new Transaction();

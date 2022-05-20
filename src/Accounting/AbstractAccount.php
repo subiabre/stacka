@@ -5,8 +5,7 @@ namespace App\Accounting;
 use App\Accounting\Balance\Balance;
 use App\Accounting\Transaction\TransactionType;
 use App\Entity\Transaction;
-use Brick\Math\BigDecimal;
-use Brick\Money\Money;
+use Brick\Math\BigRational;
 use Doctrine\Common\Collections\Collection;
 
 /**
@@ -28,11 +27,17 @@ abstract class AbstractAccount
 
     abstract public static function getDescription(): string;
 
+    /**
+     * @return Transaction[]
+     */
     public function getHistory(): array
     {
         return $this->history;
     }
 
+    /** 
+     * @return Balance[]
+     */
     public function getInventory(): array
     {
         return $this->inventory;
@@ -40,8 +45,8 @@ abstract class AbstractAccount
 
     final public function getBalance(): ?Balance
     {
-        $amount = BigDecimal::of(0);
-        $money = BigDecimal::of(0);
+        $amount = BigRational::of(0);
+        $money = BigRational::of(0);
 
         foreach ($this->inventory as $balance) {
             $amount = $amount->plus($balance->getAmount());
