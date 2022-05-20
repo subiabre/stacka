@@ -11,7 +11,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
 #[AsCommand(
-    name: 'app:account:list|accountings',
+    name: 'app:accounting:list|accountings',
     description: 'List the available accounting models',
 )]
 class AccountingListCommand extends StackaCommand
