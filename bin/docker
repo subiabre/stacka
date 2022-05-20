@@ -1,0 +1,26 @@
+#!/bin/sh
+
+case $1 in
+    "up")
+        docker-compose up -d --build
+        ;;
+
+    "down")
+        docker-compose down
+        ;;
+
+    "console")
+        docker-compose exec php bin/console $@
+        ;;
+
+    *)
+        if [ $# -eq 0 ]
+        then
+            docker-compose exec php bash
+        else
+            docker-compose exec php bin/stacka $@
+        fi
+        ;;
+esac
+
+exit 0
