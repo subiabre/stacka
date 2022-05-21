@@ -69,7 +69,7 @@ abstract class StackaCommand extends Command
             $type = TransactionType::from($name);
         } catch (\ValueError $e) {
             $io->error(sprintf(TransactionType::MESSAGE_ERROR_UNKNOWN, $name));
-            return Command::FAILURE;
+            return null;
         }
 
         return $type;
