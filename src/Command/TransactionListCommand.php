@@ -22,6 +22,8 @@ class TransactionListCommand extends StackaCommand
     {
         $this
             ->addArgument('asset', InputArgument::REQUIRED, 'The name of the asset that was transacted')
+            ->addArgument('offset', InputArgument::OPTIONAL, 'Distance from the start to skip entries', 0)
+            ->addArgument('limit', InputArgument::OPTIONAL, 'Maximum number of rows to output', 10)
         ;
     }
 
@@ -35,7 +37,25 @@ class TransactionListCommand extends StackaCommand
         $account = $asset->getAccount();
         $formatter = new AssetFormatterService($asset);
 
+        $transactions = array_map(function(Transaction $transaction) use ($account, $formatter) {
+            $account->addTransaction($transaction);
+
+            return [
+                $transaction->getAsset()->getTransactions()->indexOf($transaction),
+                $transaction->getId(),
+                $formatter->date($transaction->getDate()),
+                $transaction->getType()->value,
+                $transaction->getBalance()->getAmount(),
+                $formatter->money($transaction->getBalance()->getMoney()),
+                $formatter->money($transaction->getBalance()->getMoneyAverage()),
+                $account->getBalance()->getAmount(),
+                $formatter->money($account->getBalance()->getMoney()),
+                $formatter->money($account->getBalance()->getMoneyAverage()),
+            ];
+        }, $asset->getTransactions()->toArray());
+
         $io->table([
+            'T. #',
             'T. ID',
             'T. Date',
             'T. Type',
@@ -45,21 +65,7 @@ class TransactionListCommand extends StackaCommand
             'A. Amount',
             'A. Money',
             'A. Average'
-        ], array_map(function(Transaction $transaction) use ($account, $formatter) {
-            $account->addTransaction($transaction);
-
-            return [
-                $transaction->getId(),
-                $formatter->date($transaction->getDate()),
-                $transaction->getType()->value,
-                $transaction->getBalance()->getAmount(),
-                $formatter->money($transaction->getBalance()->getMoney()),
-                $formatter->money($transaction->getBalance()->getMoneyAverage()),
-                $account->getBalance()->getAmount(),
-                $formatter->money($account->getBalance()->getMoney()),
-                $formatter->money($account->getBalance()->getMoneyAverage())
-            ];
-        }, $asset->getTransactions()->toArray()));
+        ], array_slice($transactions, $input->getArgument('offset'), $input->getArgument('limit')));
 
         return Command::SUCCESS;
     }
