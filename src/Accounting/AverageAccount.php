@@ -4,12 +4,24 @@ namespace App\Accounting;
 
 use App\Accounting\Balance\Balance;
 use App\Entity\Transaction;
+use Brick\Math\BigRational;
 
 /**
  * Average accounting assumes the items you sold had an homogenous cost calculated by average
  */
-class AverageAccount extends FifoAccount
+class AverageAccount extends AbstractAccount
 {
+    private Balance $inventory;
+    private Balance $sales;
+    private BigRational $earnings;
+
+    public function __construct()
+    {
+        $this->inventory = new Balance();
+        $this->sales = new Balance();
+        $this->earnings = BigRational::of(0);
+    }
+
     public static function getName(): string
     {
         return 'average';
@@ -20,14 +32,46 @@ class AverageAccount extends FifoAccount
         return 'The items you sold had an homogenous cost calculated by average of the available inventory';
     }
 
-    protected function sale(Transaction $transaction): array
+    protected function buy(Transaction $transaction)
+    {
+        $this->inventory = new Balance(
+            $this->inventory->getAmount()->plus($transaction->getBalance()->getAmount()),
+            $this->inventory->getMoney()->plus($transaction->getBalance()->getMoney())
+        );
+    }
+
+    protected function sell(Transaction $transaction)
     {
         $sold = $transaction->getBalance()->getAmount();
-        $cost = $this->getBalance()->getMoneyAverage()->multipliedBy($sold);
+        $gain = $transaction->getBalance()->getMoney();
+        $cost = $this->inventory->getMoneyAverage()->multipliedBy($sold);
 
-        $amount = $this->getBalance()->getAmount()->minus($sold);
-        $money = $this->getBalance()->getMoney()->minus($cost);
+        $available = $this->inventory->getAmount()->minus($sold);
+        $this->inventory = new Balance(
+            $available,
+            $this->inventory->getMoneyAverage()->multipliedBy($available)
+        );
 
-        return [new Balance($amount, $money)];
+        $this->sales = new Balance(
+            $this->sales->getAmount()->plus($sold),
+            $this->sales->getMoney()->plus($gain)
+        );
+
+        $this->earnings = $this->earnings->plus($gain->minus($cost));
+    }
+
+    public function getInventory(): Balance
+    {
+        return $this->inventory;
+    }
+
+    public function getSales(): Balance
+    {
+        return $this->sales;
+    }
+
+    public function getEarnings(): BigRational
+    {
+        return $this->earnings;
     }
 }

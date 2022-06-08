@@ -48,9 +48,12 @@ class TransactionListCommand extends StackaCommand
                 $transaction->getBalance()->getAmount(),
                 $formatter->money($transaction->getBalance()->getMoney()),
                 $formatter->money($transaction->getBalance()->getMoneyAverage()),
-                $account->getBalance()->getAmount(),
-                $formatter->money($account->getBalance()->getMoney()),
-                $formatter->money($account->getBalance()->getMoneyAverage()),
+                $account->getInventory()->getAmount(),
+                $formatter->money($account->getInventory()->getMoney()),
+                $formatter->money($account->getInventory()->getMoneyAverage()),
+                $account->getSales()->getAmount(),
+                $formatter->money($account->getSales()->getMoney()),
+                $formatter->money($account->getEarnings())
             ];
         }, $asset->getTransactions()->toArray());
 
@@ -62,9 +65,12 @@ class TransactionListCommand extends StackaCommand
             'T. Amount',
             'T. Money',
             'T. Average',
-            'A. Amount',
-            'A. Money',
-            'A. Average'
+            'I. Amount',
+            'I. Money',
+            'I. Average',
+            'S. Amount',
+            'S. Money',
+            'Earnings'
         ], array_slice($transactions, $input->getArgument('offset'), $input->getArgument('limit')));
 
         return Command::SUCCESS;

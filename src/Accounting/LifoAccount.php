@@ -18,11 +18,9 @@ class LifoAccount extends FifoAccount
     {
         return 'The items you sold were the available items you purchased **last**';
     }
-    
-    protected function sale(Transaction $transaction): array
+
+    protected function buy(Transaction $transaction)
     {
-        $this->inventory = array_reverse($this->inventory);
-        
-        return parent::sale($transaction);
+        $this->inventory = [$transaction->getBalance(), ...$this->inventory];
     }
 }

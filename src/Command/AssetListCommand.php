@@ -34,9 +34,11 @@ class AssetListCommand extends StackaCommand
         $io->table([
             'Name',
             'Records',
-            'Amount',
-            'Money',
-            'Average'
+            'I. Amount',
+            'I. Money',
+            'I. Average',
+            'S. Money',
+            'Earnings'
         ], array_map(function(Asset $asset) {
             $account = $asset->getAccount();
             $formatter = new AssetFormatterService($asset);
@@ -46,9 +48,11 @@ class AssetListCommand extends StackaCommand
             return [
                 $asset->getName(),
                 count($asset->getTransactions()),
-                $account->getBalance()->getAmount(),
-                $formatter->money($account->getBalance()->getMoney()),
-                $formatter->money($account->getBalance()->getMoneyAverage())
+                $account->getInventory()->getAmount(),
+                $formatter->money($account->getInventory()->getMoney()),
+                $formatter->money($account->getInventory()->getMoneyAverage()),
+                $formatter->money($account->getSales()->getMoney()),
+                $formatter->money($account->getEarnings())
             ];
         }, $assets));
 
