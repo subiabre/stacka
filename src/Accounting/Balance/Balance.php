@@ -18,10 +18,10 @@ class Balance
      * @param BigRational $amount Any unit value
      * @param BigRational $money The total money value for the given amount
      */
-    public function __construct(BigRational $amount, BigRational $money)
+    public function __construct(?BigRational $amount = null, ?BigRational $money = null)
     {
-        $this->amount = $amount;
-        $this->money = $money;
+        $this->amount = $amount ?? BigRational::of(0);
+        $this->money = $money ?? BigRational::of(0);
     }
 
     public function getAmount(): BigRational
