@@ -18,11 +18,6 @@ abstract class AbstractAccount
     /** @var Transaction[] */
     protected array $history = [];
 
-    /** @var Balance[] */
-    protected array $inventory = [];
-
-    protected string $currency;
-
     abstract public static function getName(): string;
 
     abstract public static function getDescription(): string;
@@ -33,27 +28,6 @@ abstract class AbstractAccount
     public function getHistory(): array
     {
         return $this->history;
-    }
-
-    /** 
-     * @return Balance[]
-     */
-    public function getInventory(): array
-    {
-        return $this->inventory;
-    }
-
-    final public function getBalance(): ?Balance
-    {
-        $amount = BigRational::of(0);
-        $money = BigRational::of(0);
-
-        foreach ($this->inventory as $balance) {
-            $amount = $amount->plus($balance->getAmount());
-            $money = $money->plus($balance->getMoney());
-        };
-
-        return new Balance($amount, $money);
     }
 
     final public function setTransactions(Collection $transactions): self
@@ -71,11 +45,11 @@ abstract class AbstractAccount
 
         switch ($transaction->getType()) {
             case TransactionType::Buy:
-                $this->inventory = $this->buy($transaction);
+                $this->buy($transaction);
                 break;
             
             case TransactionType::Sale:
-                $this->inventory = $this->sale($transaction);
+                $this->sell($transaction);
                 break;
         }
 
@@ -84,16 +58,26 @@ abstract class AbstractAccount
 
     /**
      * Process a `Transaction` of Buy type into the account
-     * @return array The resulting inventory
      */
-    protected function buy(Transaction $transaction): array
-    {
-        return [...$this->inventory, $transaction->getBalance()];
-    }
+    abstract protected function buy(Transaction $transaction);
 
     /**
      * Process a `Transaction` of Sale type into the account
-     * @return array The resulting inventory
      */
-    abstract protected function sale(Transaction $transaction): array;
+    abstract protected function sell(Transaction $transaction);
+
+    /**
+     * @return Balance The Balance of available units and their gross value (cost)
+     */
+    abstract public function getInventory(): Balance;
+
+    /**
+     * @return Balance The Balance of sold units and their gross value (gains)
+     */
+    abstract public function getSales(): Balance;
+
+    /**
+     * @return BigRational The gross difference between the sale gains and their cost
+     */
+    abstract public function getEarnings(): BigRational;
 }
