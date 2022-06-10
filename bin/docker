@@ -2,19 +2,23 @@
 
 case $1 in
     "up")
-        docker-compose up -d --build
+        docker-compose -f docker-compose.yml up -d
+        ;;
+
+    "build")
+        docker-compose -f docker-compose.yml build
         ;;
 
     "down")
-        docker-compose down
+        docker-compose -f docker-compose.yml down
         ;;
 
     *)
         if [ $# -eq 0 ]
         then
-            docker-compose exec php bash
+            docker-compose -f docker-compose.yml exec php bash
         else
-            docker-compose exec php bin/stacka $@
+            docker-compose -f docker-compose.yml exec php bin/stacka $@
         fi
         ;;
 esac
