@@ -9,10 +9,6 @@ case $1 in
         docker-compose down
         ;;
 
-    "console")
-        docker-compose exec php bin/console $@
-        ;;
-
     *)
         if [ $# -eq 0 ]
         then
