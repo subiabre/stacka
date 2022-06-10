@@ -45,13 +45,13 @@ class TransactionListCommand extends StackaCommand
                 $transaction->getId(),
                 $formatter->date($transaction->getDate()),
                 $transaction->getType()->value,
-                $transaction->getBalance()->getAmount(),
+                $formatter->amount($transaction->getBalance()->getAmount()),
                 $formatter->money($transaction->getBalance()->getMoney()),
                 $formatter->money($transaction->getBalance()->getMoneyAverage()),
-                $account->getInventory()->getAmount(),
+                $formatter->amount($account->getInventory()->getAmount()),
                 $formatter->money($account->getInventory()->getMoney()),
                 $formatter->money($account->getInventory()->getMoneyAverage()),
-                $account->getSales()->getAmount(),
+                $formatter->amount($account->getSales()->getAmount()),
                 $formatter->money($account->getSales()->getMoney()),
                 $formatter->money($account->getEarnings())
             ];

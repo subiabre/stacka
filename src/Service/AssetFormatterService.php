@@ -4,7 +4,6 @@ namespace App\Service;
 
 use App\Entity\Asset;
 use Brick\Math\BigNumber;
-use Brick\Math\RoundingMode;
 use Brick\Money\Context\CustomContext;
 use Brick\Money\Money;
 
@@ -42,5 +41,10 @@ class AssetFormatterService
     public function money(BigNumber $money)
     {
         return $this->toCurrency($money)->formatTo($this->asset->getMoneyFormat());
+    }
+
+    public function amount(BigNumber $amount)
+    {
+        return $amount->toBigDecimal();
     }
 }

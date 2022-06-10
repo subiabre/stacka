@@ -48,7 +48,7 @@ class AssetListCommand extends StackaCommand
             return [
                 $asset->getName(),
                 count($asset->getTransactions()),
-                $account->getInventory()->getAmount(),
+                $formatter->amount($account->getInventory()->getAmount()),
                 $formatter->money($account->getInventory()->getMoney()),
                 $formatter->money($account->getInventory()->getMoneyAverage()),
                 $formatter->money($account->getSales()->getMoney()),
