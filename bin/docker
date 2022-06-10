@@ -20,13 +20,16 @@ case $1 in
         docker-compose -f docker-compose.yml exec php bin/console doctrine:schema:update --force
         ;;
 
+    "php")
+        docker-compose -f docker-compose.yml exec php bash
+        ;;
+
+    "mariadb")
+        docker-compose -f docker-compose.yml exec mariadb bash
+        ;;
+
     *)
-        if [ $# -eq 0 ]
-        then
-            docker-compose -f docker-compose.yml exec php bash
-        else
-            docker-compose -f docker-compose.yml exec php bin/stacka $@
-        fi
+        docker-compose -f docker-compose.yml exec php bin/stacka $@
         ;;
 esac
 

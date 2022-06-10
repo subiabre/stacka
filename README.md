@@ -47,10 +47,12 @@ bin/docker build
 bin/docker up
 # To stop the containers
 bin/docker down
+# To start a bash session on the php container
+bin/docker php
+# To start a bash session on the mariadb container
+bin/docker mariadb
 # To relay commands to stacka
 bin/docker <command>
-# To start a bash session on the php container
-bin/docker
 ```
 
 Note that during installation via `make` a modified version of this script is set as `stacka` on your system.
