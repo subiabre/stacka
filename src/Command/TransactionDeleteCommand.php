@@ -43,7 +43,7 @@ class TransactionDeleteCommand extends StackaCommand
         $this->entityManager->remove($transaction);
         $this->entityManager->flush();
 
-        $io->success(sprintf(Transaction::MESSAGE_SUCCESS_REMOVED, $transaction->getId()));
+        $io->success(sprintf(Transaction::MESSAGE_SUCCESS_REMOVED, $id));
 
         return Command::SUCCESS;
     }
