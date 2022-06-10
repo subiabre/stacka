@@ -23,7 +23,7 @@ class RoundingListCommand extends StackaCommand
         $roundings = $this->roundingLocator->getRoundings();
 
         $io->listing(array_map(function(RoundingInterface $rounding) {
-            return $rounding::getName();
+            return sprintf("<info>%s</info>\n %s", $rounding->getName(), $rounding->getDescription());
         }, \iterator_to_array($roundings)));
 
         return Command::SUCCESS;

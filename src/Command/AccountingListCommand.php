@@ -12,7 +12,7 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 
 #[AsCommand(
     name: 'app:accounting:list|accountings',
-    description: 'List the available accounting models',
+    description: 'List the available accounting methods',
 )]
 class AccountingListCommand extends StackaCommand
 {
@@ -22,14 +22,8 @@ class AccountingListCommand extends StackaCommand
 
         $accounts = $this->accountLocator->getAccounts();
 
-        $io->table([
-            'Name',
-            'Description'
-        ], array_map(function(AbstractAccount $account) {
-            return [
-                $account::getName(),
-                $account::getDescription()
-            ];
+        $io->listing(array_map(function(AbstractAccount $account) {
+            return sprintf("<info>%s</info>\n %s", $account->getName(), $account->getDescription());
         }, \iterator_to_array($accounts)));
 
         return Command::SUCCESS;
