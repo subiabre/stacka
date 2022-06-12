@@ -31,18 +31,24 @@ class AssetInfoCommand extends StackaCommand
         $asset = $this->getAsset($input, $output, 'asset');
         if (!$asset) return Command::FAILURE;
 
-        $io->definitionList(
-            ['Name' => $asset->getName()],
-            ['Transactions' => $asset->getTransactions()->count()],
-            ['Accounting' => $asset->getAccount()->getName()],
+        $io->table([],[
+            ['<info>Asset</info>'],
             new TableSeparator(),
-            ['Date Formatting' => $asset->getDateFormat()],
+            ['Name', $asset->getName()],
+            ['Transactions', $asset->getTransactions()->count()],
+            ['Accounting', $asset->getAccount()->getName()],
             new TableSeparator(),
-            ['Money Currency' => $asset->getMoneyCurrency()],
-            ['Money Formatting' => $asset->getMoneyFormat()],
-            ['Money Scale' => $asset->getMoneyScale()],
-            ['Money Rounding' => $asset->getMoneyRounding()->getName()]
-        );
+            ['<info>Date</info>'],
+            new TableSeparator(),
+            ['Format', $asset->getDateFormat()],
+            new TableSeparator(),
+            ['<info>Money</info>'],
+            new TableSeparator(),
+            ['Currency', $asset->getMoneyCurrency()],
+            ['Format', $asset->getMoneyFormat()],
+            ['Scale', $asset->getMoneyScale()],
+            ['Rounding', $asset->getMoneyRounding()->getName()]
+        ]);
 
         return Command::SUCCESS;
     }
