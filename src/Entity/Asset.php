@@ -106,6 +106,13 @@ class Asset
         return $this->transactions;
     }
 
+    public function setTransactions(Collection $transactions): self
+    {
+        $this->transactions = $transactions;
+
+        return $this;
+    }
+
     public function addTransaction(Transaction $transaction): self
     {
         if (!$this->transactions->contains($transaction)) {
