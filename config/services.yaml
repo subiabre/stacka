@@ -31,8 +31,8 @@ services:
     App\Console\Stacka:
         public: true
         arguments:
-        - '%kernel.project_dir%'
-        - !tagged app.command
+            - '%kernel.project_dir%'
+            - !tagged app.command
 
     App\Accounting\AccountLocator:
         arguments:
