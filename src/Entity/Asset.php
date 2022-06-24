@@ -38,7 +38,7 @@ class Asset
     #[ORM\Column(type: 'object')]
     private $account;
 
-    #[ORM\OneToMany(mappedBy: 'asset', targetEntity: Transaction::class, orphanRemoval: true)]
+    #[ORM\OneToMany(mappedBy: 'asset', targetEntity: Transaction::class, orphanRemoval: true, cascade: ['persist'])]
     private $transactions;
 
     #[Assert\Locale()]
