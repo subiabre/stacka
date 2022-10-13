@@ -11,22 +11,19 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 #[AsCommand(
     name: 'app:asset:export|export',
-    description: 'Export a list of Assets to a JSON file',
+    description: 'Export a list of Assets to JSON',
 )]
 class AssetExportCommand extends StackaCommand
 {
     protected function configure(): void
     {
         $this
-            ->addArgument('file', InputArgument::REQUIRED, 'A name for the destination file')
             ->addArgument('assets', InputArgument::IS_ARRAY, 'The name of the assets to be imported', ['%%'])
         ;
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $file = sprintf("%s.json", rtrim($input->getArgument('file'), '.json'));
-
         $assets = [];
         foreach ($input->getArgument('assets') as $name) {
             $assets = [...$assets, ...$this->assetRepository->findLikeName($name)];
@@ -55,7 +52,7 @@ class AssetExportCommand extends StackaCommand
             ]);
         }
 
-        file_put_contents($file, json_encode($json, JSON_PRETTY_PRINT));
+        $output->write(json_encode($json));
 
         return Command::SUCCESS;
     }
