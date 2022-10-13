@@ -8,7 +8,7 @@ bin:
 	sed -i 's_docker-compose.yml_$(project_dir)/docker-compose.yml_g' ./build/docker
 
 link: bin
-	sudo ln -s $(project_dir)/build/docker /usr/local/bin/stacka
+	sudo ln -sf $(project_dir)/build/docker /usr/local/bin/stacka
 	sudo chmod +x /usr/local/bin/stacka
 
 unlink:
