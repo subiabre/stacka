@@ -1,5 +1,6 @@
 project_dir := $(strip $(shell dirname $(realpath $(lastword $(MAKEFILE_LIST)))))
 
+.PHONY: bin
 bin:
 	mkdir -p ./build
 	cp ./bin/docker ./build/bin
