@@ -1,46 +1,37 @@
 #!/bin/sh
 
-if ! [ -x "$(command -v 'docker compose')" ] && ! [ -x "$(command -v 'docker-compose')" ]; then
-    echo 'Error: docker compose is not installed.' >&2
-    exit 1
-fi
-
-if [ -x "$(command -v 'docker-compose')" ]; then
-    docker_compose='docker-compose'
-else
-    docker_compose='docker compose'
-fi
+compose=''
 
 case $1 in
     "up")
-        $docker_compose -f docker-compose.yml up -d
+        $compose -f docker-compose.yml up -d
         ;;
 
     "build")
-        $docker_compose -f docker-compose.yml build
+        $compose -f docker-compose.yml build
         ;;
 
     "down")
-        $docker_compose -f docker-compose.yml down
+        $compose -f docker-compose.yml down
         ;;
 
     "install")
-        $docker_compose -f docker-compose.yml up -d --build
-        $docker_compose -f docker-compose.yml exec php composer install
-        $docker_compose -f docker-compose.yml exec php bin/console doctrine:database:create
-        $docker_compose -f docker-compose.yml exec php bin/console doctrine:schema:update --force
+        $compose -f docker-compose.yml up -d --build
+        $compose -f docker-compose.yml exec php composer install
+        $compose -f docker-compose.yml exec php bin/console doctrine:database:create
+        $compose -f docker-compose.yml exec php bin/console doctrine:schema:update --force
         ;;
 
     "php")
-        $docker_compose -f docker-compose.yml exec php bash
+        $compose -f docker-compose.yml exec php bash
         ;;
 
     "mariadb")
-        $docker_compose -f docker-compose.yml exec mariadb bash
+        $compose -f docker-compose.yml exec mariadb bash
         ;;
 
     *)
-        $docker_compose -f docker-compose.yml exec php bin/stacka $@
+        $compose -f docker-compose.yml exec php bin/stacka $@
         ;;
 esac
 

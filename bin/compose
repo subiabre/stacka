@@ -1,0 +1,10 @@
+#!/bin/sh
+
+if ! docker-compose > /dev/null 2>&1  && ! docker compose > /dev/null 2>&1 ; then
+    echo "Error: Could not find 'docker compose' nor 'docker-compose'. Please install docker compose."
+    exit 1
+elif docker-compose > /dev/null 2>&1; then
+    echo 'docker-compose'
+else
+    echo 'docker compose'
+fi
